@@ -5,8 +5,11 @@ namespace CircuitBreaker.Net.Config
 {
     public interface ICircuitBreakerConfig
     {
-        TaskScheduler TaskScheduler { get; set; }
-        TimeSpan Timeout { get; set; }
+        ICircuitBreakerInvoker CircuitBreakerInvoker { get; set; }
+        ICircuitBreakerSwitch CircuitBreakerSwitch { get; set; }
+        TimeSpan CircuitResetTimeout { get; set; }
+        TimeSpan InvocationTimeout { get; set; }
         int MaxFailures { get; set; }
+        TaskScheduler TaskScheduler { get; set; }
     }
 }

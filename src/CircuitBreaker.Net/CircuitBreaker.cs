@@ -7,13 +7,31 @@ namespace CircuitBreaker.Net
 {
     public class CircuitBreaker : ICircuitBreaker, ICircuitBreakerSwitch
     {
-        private readonly ICircuitBreakerState _closeState;
-        private readonly ICircuitBreakerState _halfOpenState;
-        private readonly ICircuitBreakerState _openState;
+        private readonly ICircuitBreakerState _closedState;
+        private readonly ICircuitBreakerState _halfOpenedState;
+        private readonly ICircuitBreakerState _openedState;
+        
         private ICircuitBreakerState _currentState;
 
         public CircuitBreaker(ICircuitBreakerConfig config)
         {
+            _closedState = new ClosedCircuitBreakerState(
+                config.CircuitBreakerSwitch, 
+                config.CircuitBreakerInvoker, 
+                config.MaxFailures, 
+                config.InvocationTimeout);
+
+            _halfOpenedState = new HalfOpenCircuitBreakerState(
+                config.CircuitBreakerSwitch, 
+                config.CircuitBreakerInvoker, 
+                config.InvocationTimeout);
+
+            _openedState = new OpenCircuitBreakerState(
+                config.CircuitBreakerSwitch, 
+                config.CircuitBreakerInvoker, 
+                config.CircuitResetTimeout);
+
+            _currentState = _closedState;
         }
 
         public void Execute(Action action)
@@ -54,17 +72,17 @@ namespace CircuitBreaker.Net
 
         void ICircuitBreakerSwitch.AttemptToCloseCircuit(ICircuitBreakerState @from)
         {
-            Trip(from, _halfOpenState);
+            Trip(from, _halfOpenedState);
         }
 
         void ICircuitBreakerSwitch.CloseCircuit(ICircuitBreakerState @from)
         {
-            Trip(from, _closeState);
+            Trip(from, _closedState);
         }
 
         void ICircuitBreakerSwitch.OpenCircuit(ICircuitBreakerState @from)
         {
-            Trip(from, _openState);
+            Trip(from, _openedState);
         }
 
         private void Trip(ICircuitBreakerState from, ICircuitBreakerState to)
