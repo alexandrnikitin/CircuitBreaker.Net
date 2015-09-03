@@ -98,8 +98,8 @@ Target "NuGetSource" (fun _ ->
 "Clean"
   ==> "AssemblyInfo"
   ==> "Build"
-  ==> "NuGet"
-  ==> "NuGetSource"
+//  ==> "NuGet"
+//  ==> "NuGetSource"
   ==> "Default"
 
 RunTargetOrDefault "Default"
