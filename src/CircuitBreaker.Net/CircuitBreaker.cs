@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using CircuitBreaker.Net.Config;
 using CircuitBreaker.Net.Exceptions;
 
 namespace CircuitBreaker.Net
@@ -10,9 +11,9 @@ namespace CircuitBreaker.Net
     {
         private readonly TaskScheduler _taskScheduler;
 
-        public CircuitBreaker(TaskScheduler taskScheduler)
+        public CircuitBreaker(ICircuitBreakerConfig config)
         {
-            _taskScheduler = taskScheduler;
+            _taskScheduler = config.TaskScheduler;
         }
 
         public string Id { get; private set; }

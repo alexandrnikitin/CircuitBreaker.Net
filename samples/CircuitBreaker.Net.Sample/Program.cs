@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using CircuitBreaker.Net.Config;
+
 namespace CircuitBreaker.Net.Sample
 {
     public class ExternalService
@@ -11,14 +13,18 @@ namespace CircuitBreaker.Net.Sample
         }
     }
 
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
             var externalService = new ExternalService();
-            var circuitBreaker = new CircuitBreaker(TaskScheduler.Default);
-            circuitBreaker.Execute(externalService.Get);
+            var config = new CircuitBreakerConfig
+            {
+                TaskScheduler = TaskScheduler.Default
+            };
 
+            var circuitBreaker = new CircuitBreaker(config);
+            circuitBreaker.Execute(externalService.Get);
         }
     }
 }
