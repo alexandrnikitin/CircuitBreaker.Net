@@ -25,7 +25,7 @@ namespace CircuitBreaker.Net.States
         public void Enter()
         {
             _dateTimeOpened = DateTime.UtcNow;
-            _invoker.Invoke(() => _switch.AttemptToCloseCircuit(this), _resetTimeSpan);
+            _invoker.InvokeScheduled(() => _switch.AttemptToCloseCircuit(this), _resetTimeSpan);
         }
 
         public void InvocationFails()

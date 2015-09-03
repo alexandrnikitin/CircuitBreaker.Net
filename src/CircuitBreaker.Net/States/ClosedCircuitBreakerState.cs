@@ -6,13 +6,19 @@ namespace CircuitBreaker.Net.States
     {
         private readonly ICircuitBreakerInvoker _invoker;
         private readonly int _maxFailures;
+        private readonly TimeSpan _timeout;
         private readonly ICircuitBreakerSwitch _switch;
 
         private int _failures;
 
-        public ClosedCircuitBreakerState(ICircuitBreakerSwitch @switch, ICircuitBreakerInvoker invoker, int maxFailures)
+        public ClosedCircuitBreakerState(
+            ICircuitBreakerSwitch @switch, 
+            ICircuitBreakerInvoker invoker, 
+            int maxFailures,
+            TimeSpan timeout)
         {
             _maxFailures = maxFailures;
+            _timeout = timeout;
             _switch = @switch;
             _invoker = invoker;
         }
@@ -38,12 +44,12 @@ namespace CircuitBreaker.Net.States
 
         public void Invoke(Action action)
         {
-            _invoker.Invoke(action);
+            _invoker.Invoke(action, _timeout);
         }
 
         public T Invoke<T>(Func<T> func)
         {
-            return _invoker.Invoke(func);
+            return _invoker.Invoke(func, _timeout);
         }
     }
 }

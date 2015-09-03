@@ -8,13 +8,18 @@ namespace CircuitBreaker.Net.States
     {
         private readonly ICircuitBreakerSwitch _switch;
         private readonly ICircuitBreakerInvoker _invoker;
+        private readonly TimeSpan _timeout;
 
         private bool _isEntered;
 
-        public HalfOpenCircuitBreakerState(ICircuitBreakerSwitch @switch, ICircuitBreakerInvoker invoker)
+        public HalfOpenCircuitBreakerState(
+            ICircuitBreakerSwitch @switch, 
+            ICircuitBreakerInvoker invoker,
+            TimeSpan timeout)
         {
             _switch = @switch;
             _invoker = invoker;
+            _timeout = timeout;
         }
 
         public void Enter()
@@ -37,7 +42,7 @@ namespace CircuitBreaker.Net.States
             if (_isEntered)
             {
                 _isEntered = false;
-                _invoker.Invoke(action);
+                _invoker.Invoke(action, _timeout);
             }
             else
             {
@@ -50,7 +55,7 @@ namespace CircuitBreaker.Net.States
             if (_isEntered)
             {
                 _isEntered = false;
-                return _invoker.Invoke(func);
+                return _invoker.Invoke(func, _timeout);
             }
             else
             {
