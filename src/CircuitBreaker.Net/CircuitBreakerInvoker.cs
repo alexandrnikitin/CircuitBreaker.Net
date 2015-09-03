@@ -9,6 +9,7 @@ namespace CircuitBreaker.Net
     public class CircuitBreakerInvoker : ICircuitBreakerInvoker
     {
         private readonly TaskScheduler _taskScheduler;
+        private Timer _timer;
 
         public CircuitBreakerInvoker(TaskScheduler taskScheduler)
         {
@@ -33,8 +34,8 @@ namespace CircuitBreaker.Net
         public void InvokeScheduled(Action action, TimeSpan interval)
         {
             if (action == null) throw new ArgumentNullException("action");
-            // todo
-            throw new NotImplementedException();
+            
+            _timer = new Timer(_ => action(), null, (int)interval.TotalMilliseconds, Timeout.Infinite);
         }
 
         public T Invoke<T>(Func<T> func, TimeSpan timeout)
