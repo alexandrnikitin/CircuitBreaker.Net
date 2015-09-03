@@ -40,7 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CircuitBreaker.cs" />
-    <Compile Include="CircuitBreakerOpenException.cs" />
+    <Compile Include="Exceptions\CircuitBreakerExecutionException.cs" />
+    <Compile Include="Exceptions\CircuitBreakerOpenException.cs" />
+    <Compile Include="Exceptions\CircuitBreakerTimeoutException.cs" />
     <Compile Include="ICircuitBreaker.cs" />
     <Compile Include="ICircuitBreakerEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CircuitBreaker.Net
+namespace CircuitBreaker.Net.Exceptions
 {
     public class CircuitBreakerOpenException : Exception
     {
