@@ -1,0 +1,2 @@
+# CircuitBreaker.Net
+CircuitBreaker pattern
