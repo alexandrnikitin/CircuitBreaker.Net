@@ -5,6 +5,22 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircuitBreaker.Net", "src\CircuitBreaker.Net\CircuitBreaker.Net.csproj", "{9483732D-740B-4AB1-B177-063903462AE4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8B79E0FA-7FC5-4FC2-98EA-95A7E084DF3B}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{5384C2AD-EEE0-42AA-AC12-1B71D8FD1166}"
+	ProjectSection(SolutionItems) = preProject
+		build\build.bat = build\build.bat
+		build\build.fsx = build\build.fsx
+		build\CircuitBreaker.Net.nuspec = build\CircuitBreaker.Net.nuspec
+		build\CircuitBreaker.Net.Source.nuspec = build\CircuitBreaker.Net.Source.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
