@@ -25,6 +25,10 @@ Target "Default" (fun _ ->
     trace "Hello World from FAKE"
 )
 
+Target "Publish" (fun _ ->
+    trace "Publish nuget packages"
+)
+
 Target "Build" (fun _ ->
     !! "../src/CircuitBreaker.Net/**/*.csproj"
       |> MSBuildRelease buildDir "Build"
@@ -99,8 +103,10 @@ Target "NuGetSource" (fun _ ->
 "Clean"
   ==> "AssemblyInfo"
   ==> "Build"
+  ==> "Default"
   ==> "NuGet"
   ==> "NuGetSource"
-  ==> "Default"
+  ==> "Publish"
+
 
 RunTargetOrDefault "Default"
