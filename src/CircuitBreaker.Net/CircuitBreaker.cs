@@ -10,10 +10,14 @@ namespace CircuitBreaker.Net
     public class CircuitBreaker : ICircuitBreaker
     {
         private readonly TaskScheduler _taskScheduler;
+        private readonly TimeSpan _timeout;
+
+        private DateTime _openedDateTime;
 
         public CircuitBreaker(ICircuitBreakerConfig config)
         {
             _taskScheduler = config.TaskScheduler;
+            _timeout = config.Timeout;
         }
 
         public string Id { get; private set; }
@@ -30,7 +34,7 @@ namespace CircuitBreaker.Net
 
             if (State == CircuitBreakerState.Open)
             {
-                // todo try to close
+                HandleOpenCircuit();
                 throw new CircuitBreakerOpenException();
             }
 
@@ -41,12 +45,12 @@ namespace CircuitBreaker.Net
             }
             catch (CircuitBreakerTimeoutException)
             {
-                // todo open circuit
+                OpenCircuit();
                 throw;
             }
             catch (Exception)
             {
-                // todo open
+                OpenCircuit();
                 throw new CircuitBreakerExecutionException();
             }
         }
@@ -57,5 +61,29 @@ namespace CircuitBreaker.Net
 
             throw new NotImplementedException();
         }
+
+        private void HandleOpenCircuit()
+        {
+            if (CanCloseCircuit())
+            {
+                State = CircuitBreakerState.HalfOpen;
+            }
+        }
+
+        private bool CanCloseCircuit()
+        {
+            return _openedDateTime + _timeout < DateTime.UtcNow;
+        }
+
+        private void OpenCircuit()
+        {
+            if (State != CircuitBreakerState.Open)
+            {
+                State = CircuitBreakerState.Open;
+                _openedDateTime = DateTime.UtcNow;
+            }
+        }
+
+
     }
 }
