@@ -76,7 +76,7 @@ Target "NuGetSource" (fun _ ->
     let contentDir = packagingSourceDir @@ "content"
     ensureDirectory contentDir
 
-    CopyFile contentDir (buildDir @@ "C:/Projects/my/CircuitBreaker.net/src/CircuitBreaker.Net/CircuitBreaker.cs")
+    CopyFile contentDir ("../src/CircuitBreaker.Net/CircuitBreaker.cs")
 
     NuGet (fun p -> 
         {p with
