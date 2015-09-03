@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CircuitBreaker.cs" />
+    <Compile Include="CircuitBreakerOpenException.cs" />
     <Compile Include="ICircuitBreaker.cs" />
     <Compile Include="ICircuitBreakerEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
