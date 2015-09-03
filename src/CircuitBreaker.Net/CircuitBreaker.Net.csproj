@@ -48,7 +48,10 @@
     <Compile Include="ICircuitBreaker.cs" />
     <Compile Include="ICircuitBreakerEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CircuitBreakerState.cs" />
+    <Compile Include="States\ICircuitBreakerState.cs" />
+    <Compile Include="States\ClosedCircuitBreakerState.cs" />
+    <Compile Include="States\HalfOpenCircuitBreakerState.cs" />
+    <Compile Include="States\OpenCircuitBreakerState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
