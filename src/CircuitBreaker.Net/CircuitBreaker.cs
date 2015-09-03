@@ -1,30 +1,18 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 using CircuitBreaker.Net.Config;
-using CircuitBreaker.Net.Exceptions;
+using CircuitBreaker.Net.States;
 
 namespace CircuitBreaker.Net
 {
-    public class CircuitBreaker : ICircuitBreaker
+    public class CircuitBreaker : ICircuitBreaker, ICircuitBreakerSwitch
     {
-        private readonly TaskScheduler _taskScheduler;
-        private readonly TimeSpan _timeout;
-
-        private DateTime _openedDateTime;
+        private readonly ICircuitBreakerState _closeState;
+        private readonly ICircuitBreakerState _halfOpenState;
+        private readonly ICircuitBreakerState _openState;
+        private ICircuitBreakerState _currentState;
 
         public CircuitBreaker(ICircuitBreakerConfig config)
-        {
-            _taskScheduler = config.TaskScheduler;
-            _timeout = config.Timeout;
-        }
-
-        public string Id { get; private set; }
-
-        public CircuitBreakerState State { get; private set; }
-
-        public void Dispose()
         {
         }
 
@@ -32,58 +20,57 @@ namespace CircuitBreaker.Net
         {
             if (action == null) throw new ArgumentNullException("action");
 
-            if (State == CircuitBreakerState.Open)
-            {
-                HandleOpenCircuit();
-                throw new CircuitBreakerOpenException();
-            }
-
             try
             {
-                // todo add metrics
-                Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
-            }
-            catch (CircuitBreakerTimeoutException)
-            {
-                OpenCircuit();
-                throw;
+                _currentState.Invoke(action);
             }
             catch (Exception)
             {
-                OpenCircuit();
-                throw new CircuitBreakerExecutionException();
+                _currentState.InvocationFails();
+                throw;
             }
+
+            _currentState.InvocationSucceeds();
         }
 
         public T Execute<T>(Func<T> func)
         {
             if (func == null) throw new ArgumentNullException("func");
 
-            throw new NotImplementedException();
-        }
-
-        private void HandleOpenCircuit()
-        {
-            if (CanCloseCircuit())
+            T result;
+            try
             {
-                State = CircuitBreakerState.HalfOpen;
+                result = _currentState.Invoke(func);
             }
-        }
-
-        private bool CanCloseCircuit()
-        {
-            return _openedDateTime + _timeout < DateTime.UtcNow;
-        }
-
-        private void OpenCircuit()
-        {
-            if (State != CircuitBreakerState.Open)
+            catch (Exception)
             {
-                State = CircuitBreakerState.Open;
-                _openedDateTime = DateTime.UtcNow;
+                _currentState.InvocationFails();
+                throw;
             }
+
+            _currentState.InvocationSucceeds();
+            return result;
         }
 
+        void ICircuitBreakerSwitch.AttemptToCloseCircuit(ICircuitBreakerState @from)
+        {
+            Trip(from, _halfOpenState);
+        }
 
+        void ICircuitBreakerSwitch.CloseCircuit(ICircuitBreakerState @from)
+        {
+            Trip(from, _closeState);
+        }
+
+        void ICircuitBreakerSwitch.OpenCircuit(ICircuitBreakerState @from)
+        {
+            Trip(from, _openState);
+        }
+
+        private void Trip(ICircuitBreakerState from, ICircuitBreakerState to)
+        {
+            _currentState = to;
+            to.Enter();
+        }
     }
 }
