@@ -10,8 +10,6 @@ namespace CircuitBreaker.Net.States
         private readonly TimeSpan _resetTimeSpan;
         private readonly ICircuitBreakerSwitch _switch;
 
-        private DateTime _dateTimeOpened;
-
         public OpenCircuitBreakerState(
             ICircuitBreakerSwitch @switch, 
             ICircuitBreakerInvoker invoker, 
@@ -24,7 +22,6 @@ namespace CircuitBreaker.Net.States
 
         public void Enter()
         {
-            _dateTimeOpened = DateTime.UtcNow;
             _invoker.InvokeScheduled(() => _switch.AttemptToCloseCircuit(this), _resetTimeSpan);
         }
 
