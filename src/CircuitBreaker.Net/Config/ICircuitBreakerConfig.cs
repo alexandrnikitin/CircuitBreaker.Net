@@ -7,5 +7,6 @@ namespace CircuitBreaker.Net.Config
     {
         TaskScheduler TaskScheduler { get; set; }
         TimeSpan Timeout { get; set; }
+        int MaxFailures { get; set; }
     }
 }
