@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CircuitBreaker.cs" />
+    <Compile Include="CircuitBreakerInvoker.cs" />
     <Compile Include="Config\CircuitBreakerConfig.cs" />
     <Compile Include="Config\ICircuitBreakerConfig.cs" />
     <Compile Include="Exceptions\CircuitBreakerExecutionException.cs" />
