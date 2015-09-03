@@ -60,6 +60,7 @@ Target "NuGet" (fun _ ->
             Summary = description
             Tags = tags |> String.concat " "
             Version = version
+            Copyright = copyright
 
             OutputPath = packagingRoot
             WorkingDir = packagingDir
@@ -98,8 +99,8 @@ Target "NuGetSource" (fun _ ->
 "Clean"
   ==> "AssemblyInfo"
   ==> "Build"
-//  ==> "NuGet"
-//  ==> "NuGetSource"
+  ==> "NuGet"
+  ==> "NuGetSource"
   ==> "Default"
 
 RunTargetOrDefault "Default"
