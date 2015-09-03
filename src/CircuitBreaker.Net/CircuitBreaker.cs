@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using CircuitBreaker.Net.Exceptions;
+
 namespace CircuitBreaker.Net
 {
     public class CircuitBreaker : ICircuitBreaker
@@ -31,12 +33,27 @@ namespace CircuitBreaker.Net
                 throw new CircuitBreakerOpenException();
             }
 
-            // todo add metrics
-            Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+            try
+            {
+                // todo add metrics
+                Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+            }
+            catch (CircuitBreakerTimeoutException)
+            {
+                // todo open circuit
+                throw;
+            }
+            catch (Exception)
+            {
+                // todo open
+                throw new CircuitBreakerExecutionException();
+            }
         }
 
         public T Execute<T>(Func<T> func)
         {
+            if (func == null) throw new ArgumentNullException("func");
+
             throw new NotImplementedException();
         }
     }
