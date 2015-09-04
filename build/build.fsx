@@ -12,13 +12,14 @@ let tags = ["CircuitBreaker"]
 let version = "0.1.0-beta"
 
 let buildDir = "output"
+let buildTestsDir = "output-tests"
 let packagingRoot = "./packaging/"
 let packagingDir = packagingRoot @@  product
 let packagingSourceDir = packagingRoot @@  product + ".Source"
 let nugetPath = "../.nuget/nuget.exe"
 
 Target "Clean" (fun _ ->
-    CleanDirs [buildDir; packagingRoot]
+    CleanDirs [buildDir; buildTestsDir; packagingRoot]
 )
 
 Target "Default" (fun _ ->
@@ -33,6 +34,24 @@ Target "Build" (fun _ ->
     !! "../src/CircuitBreaker.Net/**/*.csproj"
       |> MSBuildRelease buildDir "Build"
       |> Log "Build-Output: "
+)
+
+Target "BuildTests" (fun _ ->
+    !! "../tests/**/*.csproj"
+        |> MSBuildRelease buildTestsDir "Build"
+        |> Log "BuildTests-Output: "
+)
+
+open Fake.Testing
+let testDlls = !! (buildTestsDir + "/*.Tests.dll")
+
+Target "Test" (fun _ ->
+    testDlls
+        |> xUnit2 (fun p -> 
+            {p with 
+                ToolPath = "../packages/xunit.runner.console.2.1.0-beta4-build3109/tools/xunit.console.exe"
+                ShadowCopy = false
+                HtmlOutputPath = Some (buildTestsDir @@ "xunit-html-output.html")})
 )
 
 open Fake.AssemblyInfoFile
@@ -122,6 +141,8 @@ Target "NuGetSource" (fun _ ->
 "Clean"
   ==> "AssemblyInfo"
   ==> "Build"
+  ==> "BuildTests"
+  ==> "Test"
   ==> "Default"
   ==> "NuGet"
   ==> "NuGetSource"
