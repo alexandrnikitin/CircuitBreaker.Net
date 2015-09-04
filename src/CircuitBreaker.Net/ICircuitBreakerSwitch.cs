@@ -2,7 +2,7 @@
 
 namespace CircuitBreaker.Net
 {
-    public interface ICircuitBreakerSwitch
+    internal interface ICircuitBreakerSwitch
     {
         void OpenCircuit(ICircuitBreakerState from);
         void AttemptToCloseCircuit(ICircuitBreakerState from);

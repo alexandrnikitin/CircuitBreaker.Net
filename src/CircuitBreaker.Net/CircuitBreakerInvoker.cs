@@ -7,7 +7,7 @@ using CircuitBreaker.Net.States;
 
 namespace CircuitBreaker.Net
 {
-    public class CircuitBreakerInvoker : ICircuitBreakerInvoker
+    internal class CircuitBreakerInvoker : ICircuitBreakerInvoker
     {
         private readonly TaskScheduler _taskScheduler;
 

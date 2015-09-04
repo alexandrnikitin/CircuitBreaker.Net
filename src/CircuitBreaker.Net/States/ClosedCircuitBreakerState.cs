@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace CircuitBreaker.Net.States
 {
-    public class ClosedCircuitBreakerState : ICircuitBreakerState
+    internal class ClosedCircuitBreakerState : ICircuitBreakerState
     {
         private readonly ICircuitBreakerInvoker _invoker;
         private readonly int _maxFailures;

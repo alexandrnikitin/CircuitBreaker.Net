@@ -5,7 +5,7 @@ using CircuitBreaker.Net.Exceptions;
 
 namespace CircuitBreaker.Net.States
 {
-    public class HalfOpenCircuitBreakerState : ICircuitBreakerState
+    internal class HalfOpenCircuitBreakerState : ICircuitBreakerState
     {
         private const int Entered = 1;
         private const int NotEntered = 0;

@@ -4,7 +4,7 @@ using CircuitBreaker.Net.States;
 
 namespace CircuitBreaker.Net
 {
-    public interface ICircuitBreakerInvoker
+    internal interface ICircuitBreakerInvoker
     {
         void InvokeScheduled(Action action, TimeSpan interval);
         void InvokeThrough(ICircuitBreakerState state, Action action, TimeSpan timeout);

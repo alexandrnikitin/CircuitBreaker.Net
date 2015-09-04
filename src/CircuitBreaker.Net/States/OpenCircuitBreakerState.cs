@@ -4,7 +4,7 @@ using CircuitBreaker.Net.Exceptions;
 
 namespace CircuitBreaker.Net.States
 {
-    public class OpenCircuitBreakerState : ICircuitBreakerState
+    internal class OpenCircuitBreakerState : ICircuitBreakerState
     {
         private readonly ICircuitBreakerInvoker _invoker;
         private readonly TimeSpan _resetTimeSpan;

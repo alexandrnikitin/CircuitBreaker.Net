@@ -2,7 +2,7 @@
 
 namespace CircuitBreaker.Net.States
 {
-    public interface ICircuitBreakerState
+    internal interface ICircuitBreakerState
     {
         void Enter();
         void InvocationFails();
