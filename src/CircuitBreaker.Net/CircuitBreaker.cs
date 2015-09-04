@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
-using CircuitBreaker.Net.Config;
 using CircuitBreaker.Net.States;
 
 namespace CircuitBreaker.Net
@@ -14,23 +14,29 @@ namespace CircuitBreaker.Net
         
         private ICircuitBreakerState _currentState;
 
-        public CircuitBreaker(ICircuitBreakerConfig config)
+        public CircuitBreaker(
+            TaskScheduler taskScheduler,
+            int maxFailures,
+            TimeSpan invocationTimeout,
+            TimeSpan circuitResetTimeout)
         {
+            var invoker = new CircuitBreakerInvoker(taskScheduler);
+
             _closedState = new ClosedCircuitBreakerState(
-                config.CircuitBreakerSwitch, 
-                config.CircuitBreakerInvoker, 
-                config.MaxFailures, 
-                config.InvocationTimeout);
+                this,
+                invoker,
+                maxFailures,
+                invocationTimeout);
 
             _halfOpenedState = new HalfOpenCircuitBreakerState(
-                config.CircuitBreakerSwitch, 
-                config.CircuitBreakerInvoker, 
-                config.InvocationTimeout);
+                this,
+                invoker,
+                invocationTimeout);
 
             _openedState = new OpenCircuitBreakerState(
-                config.CircuitBreakerSwitch, 
-                config.CircuitBreakerInvoker, 
-                config.CircuitResetTimeout);
+                this,
+                invoker, 
+                circuitResetTimeout);
 
             _currentState = _closedState;
         }
