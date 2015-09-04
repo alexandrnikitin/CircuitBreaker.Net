@@ -1,11 +1,11 @@
-#r @"..\packages\FAKE.4.3.4/tools/FakeLib.dll"
+#r @"../packages/FAKE.4.3.4/tools/FakeLib.dll"
 open Fake
 
 RestorePackages()
 
 let product = "CircuitBreaker.Net"
 let description = "Implementation of CircuitBreaker pattern on .NET"
-let copyright = "Copyright © 2015"
+let copyright = @"Copyright © 2015"
 let authors = [ "Alexandr Nikitin" ]
 let company = "Alexandr Nikitin"
 let tags = ["CircuitBreaker"]
@@ -31,7 +31,7 @@ Target "Publish" (fun _ ->
 )
 
 Target "Build" (fun _ ->
-    !! "../src/CircuitBreaker.Net/**/*.csproj"
+    !! "../src/**/*.csproj"
       |> MSBuildRelease buildDir "Build"
       |> Log "Build-Output: "
 )
