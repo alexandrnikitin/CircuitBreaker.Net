@@ -110,7 +110,7 @@ namespace CircuitBreaker.Net.Tests
                 Assert.ThrowsAny<Exception>(() => _sut.Execute(_throwFunc));
                 
                 Thread.Sleep(ResetTimeout);
-                Thread.Sleep(10);
+                Thread.Sleep(100);
 
                 _sut.Execute(_anyFunc);
             }
