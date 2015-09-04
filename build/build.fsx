@@ -9,7 +9,7 @@ let copyright = "Copyright © 2015"
 let authors = [ "Alexandr Nikitin" ]
 let company = "Alexandr Nikitin"
 let tags = ["CircuitBreaker"]
-let version = "0.0.1-beta"
+let version = "0.1.0-beta"
 
 let buildDir = "output"
 let packagingRoot = "./packaging/"
