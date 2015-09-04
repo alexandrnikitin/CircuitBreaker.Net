@@ -55,17 +55,17 @@ namespace CircuitBreaker.Net
             return _currentState.Invoke(func);
         }
 
-        void ICircuitBreakerSwitch.AttemptToCloseCircuit(ICircuitBreakerState @from)
+        void ICircuitBreakerSwitch.AttemptToCloseCircuit(ICircuitBreakerState from)
         {
             Trip(from, _halfOpenedState);
         }
 
-        void ICircuitBreakerSwitch.CloseCircuit(ICircuitBreakerState @from)
+        void ICircuitBreakerSwitch.CloseCircuit(ICircuitBreakerState from)
         {
             Trip(from, _closedState);
         }
 
-        void ICircuitBreakerSwitch.OpenCircuit(ICircuitBreakerState @from)
+        void ICircuitBreakerSwitch.OpenCircuit(ICircuitBreakerState from)
         {
             Trip(from, _openedState);
         }
