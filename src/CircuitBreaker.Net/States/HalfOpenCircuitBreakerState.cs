@@ -45,7 +45,7 @@ namespace CircuitBreaker.Net.States
         {
             if (Interlocked.CompareExchange(ref _isEntered, NotEntered, Entered) == Entered)
             {
-                _invoker.Invoke(action, _timeout);
+                _invoker.InvokeThrough(this, action, _timeout);
             }
             else
             {
@@ -57,7 +57,7 @@ namespace CircuitBreaker.Net.States
         {
             if (Interlocked.CompareExchange(ref _isEntered, NotEntered, Entered) == Entered)
             {
-                return _invoker.Invoke(func, _timeout);
+                return _invoker.InvokeThrough(this, func, _timeout);
             }
             else
             {

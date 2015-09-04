@@ -3,12 +3,14 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using CircuitBreaker.Net.Exceptions;
+using CircuitBreaker.Net.States;
 
 namespace CircuitBreaker.Net
 {
     public class CircuitBreakerInvoker : ICircuitBreakerInvoker
     {
         private readonly TaskScheduler _taskScheduler;
+
         private Timer _timer;
 
         public CircuitBreakerInvoker(TaskScheduler taskScheduler)
@@ -16,7 +18,46 @@ namespace CircuitBreaker.Net
             _taskScheduler = taskScheduler;
         }
 
-        public void Invoke(Action action, TimeSpan timeout)
+        public void InvokeScheduled(Action action, TimeSpan interval)
+        {
+            if (action == null) throw new ArgumentNullException("action");
+
+            _timer = new Timer(_ => action(), null, (int)interval.TotalMilliseconds, Timeout.Infinite);
+        }
+
+        public void InvokeThrough(ICircuitBreakerState state, Action action, TimeSpan timeout)
+        {
+            try
+            {
+                Invoke(action, timeout);
+            }
+            catch (Exception)
+            {
+                state.InvocationFails();
+                throw;
+            }
+
+            state.InvocationSucceeds();
+        }
+
+        public T InvokeThrough<T>(ICircuitBreakerState state, Func<T> func, TimeSpan timeout)
+        {
+            T result;
+            try
+            {
+                result = Invoke(func, timeout);
+            }
+            catch (Exception)
+            {
+                state.InvocationFails();
+                throw;
+            }
+
+            state.InvocationSucceeds();
+            return result;
+        }
+
+        private void Invoke(Action action, TimeSpan timeout)
         {
             if (action == null) throw new ArgumentNullException("action");
 
@@ -31,14 +72,7 @@ namespace CircuitBreaker.Net
             throw new CircuitBreakerTimeoutException();
         }
 
-        public void InvokeScheduled(Action action, TimeSpan interval)
-        {
-            if (action == null) throw new ArgumentNullException("action");
-            
-            _timer = new Timer(_ => action(), null, (int)interval.TotalMilliseconds, Timeout.Infinite);
-        }
-
-        public T Invoke<T>(Func<T> func, TimeSpan timeout)
+        private T Invoke<T>(Func<T> func, TimeSpan timeout)
         {
             if (func == null) throw new ArgumentNullException("func");
 
@@ -51,7 +85,6 @@ namespace CircuitBreaker.Net
 
             tokenSource.Cancel();
             throw new CircuitBreakerTimeoutException();
-
         }
     }
 }

@@ -44,12 +44,12 @@ namespace CircuitBreaker.Net.States
 
         public void Invoke(Action action)
         {
-            _invoker.Invoke(action, _timeout);
+            _invoker.InvokeThrough(this, action, _timeout);
         }
 
         public T Invoke<T>(Func<T> func)
         {
-            return _invoker.Invoke(func, _timeout);
+            return _invoker.InvokeThrough(this, func, _timeout);
         }
     }
 }

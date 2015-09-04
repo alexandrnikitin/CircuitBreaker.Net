@@ -45,36 +45,14 @@ namespace CircuitBreaker.Net
         {
             if (action == null) throw new ArgumentNullException("action");
 
-            try
-            {
-                _currentState.Invoke(action);
-            }
-            catch (Exception)
-            {
-                _currentState.InvocationFails();
-                throw;
-            }
-
-            _currentState.InvocationSucceeds();
+            _currentState.Invoke(action);
         }
 
         public T Execute<T>(Func<T> func)
         {
             if (func == null) throw new ArgumentNullException("func");
-
-            T result;
-            try
-            {
-                result = _currentState.Invoke(func);
-            }
-            catch (Exception)
-            {
-                _currentState.InvocationFails();
-                throw;
-            }
-
-            _currentState.InvocationSucceeds();
-            return result;
+            
+            return _currentState.Invoke(func);
         }
 
         void ICircuitBreakerSwitch.AttemptToCloseCircuit(ICircuitBreakerState @from)
