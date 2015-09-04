@@ -1,16 +1,11 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+
+using CircuitBreaker.Net.Exceptions;
 
 namespace CircuitBreaker.Net.Sample
 {
-    public class ExternalService
-    {
-        public void Get()
-        {
-            throw new Exception();
-        }
-    }
-
     public class Program
     {
         public static void Main()
@@ -19,11 +14,33 @@ namespace CircuitBreaker.Net.Sample
 
             var circuitBreaker = new CircuitBreaker(
                 TaskScheduler.Default,
-                maxFailures: 3,
+                maxFailures: 2,
                 invocationTimeout: TimeSpan.FromMilliseconds(10),
-                circuitResetTimeout: TimeSpan.FromMilliseconds(10));
+                circuitResetTimeout: TimeSpan.FromMilliseconds(1000));
 
-            circuitBreaker.Execute(externalService.Get);
+            TryExecute(circuitBreaker, externalService.Get);
+            TryExecute(circuitBreaker, () => Thread.Sleep(100));
+            TryExecute(circuitBreaker, externalService.Get);
+        }
+
+        private static void TryExecute(ICircuitBreaker circuitBreaker, Action action)
+        {
+            try
+            {
+                circuitBreaker.Execute(action);
+            }
+            catch (CircuitBreakerOpenException)
+            {
+                Console.WriteLine("CircuitBreakerOpenException");
+            }
+            catch (CircuitBreakerTimeoutException)
+            {
+                Console.WriteLine("CircuitBreakerTimeoutException");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Exception");
+            }
         }
     }
 }
