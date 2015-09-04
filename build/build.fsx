@@ -79,8 +79,27 @@ Target "NuGetSource" (fun _ ->
     
     let contentDir = packagingSourceDir @@ "content"
     ensureDirectory contentDir
+    let contentCircuitBreakerDir = contentDir @@ "CircuitBreaker"
+    ensureDirectory contentCircuitBreakerDir
+    let contentCircuitBreakerStatesDir = contentCircuitBreakerDir @@ "States"
+    ensureDirectory contentCircuitBreakerStatesDir
+    let contentCircuitBreakerExceptionsDir = contentCircuitBreakerDir @@ "Exceptions"
+    ensureDirectory contentCircuitBreakerExceptionsDir
 
-    CopyFile contentDir ("../src/CircuitBreaker.Net/CircuitBreaker.cs")
+    CopyFile (contentDir @@ "CircuitBreaker") ("../src/CircuitBreaker.Net/CircuitBreaker.cs")
+    CopyFile (contentDir @@ "CircuitBreaker") ("../src/CircuitBreaker.Net/CircuitBreakerInvoker.cs")
+    CopyFile (contentDir @@ "CircuitBreaker") ("../src/CircuitBreaker.Net/ICircuitBreaker.cs")
+    CopyFile (contentDir @@ "CircuitBreaker") ("../src/CircuitBreaker.Net/ICircuitBreakerInvoker.cs")
+    CopyFile (contentDir @@ "CircuitBreaker") ("../src/CircuitBreaker.Net/ICircuitBreakerSwitch.cs")
+
+    CopyFile (contentDir @@ "CircuitBreaker/States") ("../src/CircuitBreaker.Net/States/ClosedCircuitBreakerState.cs")
+    CopyFile (contentDir @@ "CircuitBreaker/States") ("../src/CircuitBreaker.Net/States/HalfOpenCircuitBreakerState.cs")
+    CopyFile (contentDir @@ "CircuitBreaker/States") ("../src/CircuitBreaker.Net/States/ICircuitBreakerState.cs")
+    CopyFile (contentDir @@ "CircuitBreaker/States") ("../src/CircuitBreaker.Net/States/OpenCircuitBreakerState.cs")
+
+    CopyFile (contentDir @@ "CircuitBreaker/Exceptions") ("../src/CircuitBreaker.Net/Exceptions/CircuitBreakerExecutionException.cs")
+    CopyFile (contentDir @@ "CircuitBreaker/Exceptions") ("../src/CircuitBreaker.Net/Exceptions/CircuitBreakerOpenException.cs")
+    CopyFile (contentDir @@ "CircuitBreaker/Exceptions") ("../src/CircuitBreaker.Net/Exceptions/CircuitBreakerTimeoutException.cs")
 
     NuGet (fun p -> 
         {p with
