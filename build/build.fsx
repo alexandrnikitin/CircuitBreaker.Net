@@ -70,7 +70,7 @@ Target "NuGet" (fun _ ->
             WorkingDir = packagingDir
             ToolPath = nugetPath
 
-            Publish = true
+            Publish = false
             }) 
             "CircuitBreaker.Net.nuspec"
 )
@@ -114,7 +114,7 @@ Target "NuGetSource" (fun _ ->
             WorkingDir = packagingSourceDir
             ToolPath = nugetPath
 
-            Publish = true 
+            Publish = false
             }) 
             "CircuitBreaker.Net.Source.nuspec"
 )
