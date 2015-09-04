@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="States\ClosedCircuitBreakerStateTests.cs" />
+    <Compile Include="States\HalfOpenCircuitBreakerStateTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
