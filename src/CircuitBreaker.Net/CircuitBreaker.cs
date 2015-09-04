@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 using CircuitBreaker.Net.Config;
 using CircuitBreaker.Net.States;
@@ -87,8 +88,10 @@ namespace CircuitBreaker.Net
 
         private void Trip(ICircuitBreakerState from, ICircuitBreakerState to)
         {
-            _currentState = to;
-            to.Enter();
+            if (Interlocked.CompareExchange(ref _currentState, to, from) == from)
+            {
+                to.Enter();
+            }
         }
     }
 }

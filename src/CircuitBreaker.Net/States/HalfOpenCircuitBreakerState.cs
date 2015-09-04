@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 using CircuitBreaker.Net.Exceptions;
 
@@ -10,7 +11,7 @@ namespace CircuitBreaker.Net.States
         private readonly ICircuitBreakerInvoker _invoker;
         private readonly TimeSpan _timeout;
 
-        private bool _isEntered;
+        private int _isEntered;
 
         public HalfOpenCircuitBreakerState(
             ICircuitBreakerSwitch @switch, 
@@ -24,7 +25,7 @@ namespace CircuitBreaker.Net.States
 
         public void Enter()
         {
-            _isEntered = true;
+            _isEntered = 1;
         }
 
         public void InvocationFails()
@@ -39,9 +40,8 @@ namespace CircuitBreaker.Net.States
 
         public void Invoke(Action action)
         {
-            if (_isEntered)
+            if (Interlocked.CompareExchange(ref _isEntered, 0, 1) == 1)
             {
-                _isEntered = false;
                 _invoker.Invoke(action, _timeout);
             }
             else
@@ -52,9 +52,8 @@ namespace CircuitBreaker.Net.States
 
         public T Invoke<T>(Func<T> func)
         {
-            if (_isEntered)
+            if (Interlocked.CompareExchange(ref _isEntered, 0, 1) == 1)
             {
-                _isEntered = false;
                 return _invoker.Invoke(func, _timeout);
             }
             else

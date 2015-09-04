@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace CircuitBreaker.Net.States
 {
@@ -30,8 +31,7 @@ namespace CircuitBreaker.Net.States
 
         public void InvocationFails()
         {
-            _failures++;
-            if (_failures == _maxFailures)
+            if (Interlocked.Increment(ref _failures) == _maxFailures)
             {
                 _switch.OpenCircuit(this);
             }
