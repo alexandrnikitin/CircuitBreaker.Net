@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CircuitBreakerInvokerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="States\ClosedCircuitBreakerStateTests.cs" />
     <Compile Include="States\HalfOpenCircuitBreakerStateTests.cs" />
