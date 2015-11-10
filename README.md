@@ -1,5 +1,7 @@
 # CircuitBreaker.Net
-Circuit Breaker pattern implementation for .NET. More info about the pattern [on MSDN.](https://msdn.microsoft.com/en-us/library/dn589784.aspx)
+`CircuitBreaker.Net` is an implementation of the Circuit Breaker pattern for .NET.
+This pattern can improve the stability and resiliency of your application, especially in SOAP, microservices and distributed environments.
+You can read about the pattern [on MSDN][MSDN] or from [Martin Fowler][fowler].
 
 ## Install
 
@@ -46,3 +48,5 @@ There are not [so many of them][nuget-curcuitbreaker]. I didn't find any that wo
 
   [nuget-curcuitbreaker]: https://www.nuget.org/packages?q=circuit+breaker
   [polly]: https://github.com/michael-wolfenden/Polly
+  [fowler]: http://martinfowler.com/bliki/CircuitBreaker.html
+  [MSDN]: https://msdn.microsoft.com/en-us/library/dn589784.aspx
