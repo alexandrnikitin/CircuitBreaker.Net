@@ -5,10 +5,10 @@ You can read about the pattern [on MSDN][MSDN] or from [Martin Fowler][fowler].
 
 ## Install
 
-It's available via [nuget package](https://www.nuget.org/packages/CircuitBreaker.Net)  
+It's available via [a nuget package](https://www.nuget.org/packages/CircuitBreaker.Net)  
 PM> `Install-Package CircuitBreaker.Net`
 
-Or nuget package [with sources only](https://www.nuget.org/packages/CircuitBreaker.Net.Source)  
+Or a nuget package [with the sources only](https://www.nuget.org/packages/CircuitBreaker.Net.Source)  
 PM> `Install-Package CircuitBreaker.Net.Source`
 
 ## Example Usage
@@ -20,7 +20,7 @@ var circuitBreaker = new CircuitBreaker(
     maxFailures: 3,
     invocationTimeout: TimeSpan.FromMilliseconds(100),
     circuitResetTimeout: TimeSpan.FromMilliseconds(10000));
-    
+
 try
 {
     // perform a potentially fragile call through the circuit breaker
@@ -41,9 +41,9 @@ catch (Exception)
 
 ```
 
-## WHY?
+## Why?
 
-There are not [so many of them][nuget-curcuitbreaker]. I didn't find any that would suit me. [Polly][polly] seems the most mature from all of them but it doesn't provide a way to specify a separate `TaskScheduler` to execute actions. But that's a crucial aspect when you call a third-party service, because those calls could stuff your "main" `TaskScheduler`. Actually none of those libraries support injection of a `TaskScheduler`. `Helpful.CircuitBreaker` by RokitSalad isn't thread safe. `CircuitBreaker` by kylos101 executes actions on the same thread. `ManagedCircuitBreaker` by AsherW is a fork of `Polly` with emphasize on IoC containers. The code provided on MSDN isn't production ready and just a piece of code. And so on so forth. So that the yet another library was born. I hope you will find it helpful. :wink:
+There are [not so many of them][nuget-curcuitbreaker]. I didn't find any that would suit me. [Polly][polly] seems the most mature from all of them but it doesn't provide a way to specify a separate `TaskScheduler` to execute actions. But that's a crucial aspect when you call a third-party service, because those calls could stuff your "main" `TaskScheduler`. Actually none of those libraries support injection of a `TaskScheduler`. `Helpful.CircuitBreaker` by RokitSalad isn't thread safe. `CircuitBreaker` by kylos101 executes actions on the same thread. `ManagedCircuitBreaker` by AsherW is a fork of `Polly` with emphasize on IoC containers. The code provided on MSDN isn't production ready and just a piece of code. And so on so forth. So that the yet another library was born. I hope you will find it helpful. :wink:
 
 
   [nuget-curcuitbreaker]: https://www.nuget.org/packages?q=circuit+breaker
