@@ -1,6 +1,6 @@
 # CircuitBreaker.Net
 `CircuitBreaker.Net` is an implementation of the Circuit Breaker pattern for .NET.
-This pattern can improve the stability and resiliency of your application, especially in SOAP, microservices and distributed environments.
+This pattern can improve the stability and resiliency of your application, especially in SOAP, microservices and distributed environments. The pattern serves two main purposes: to isolate communication with third-party services, so that your application won't be affected by their fails. And to react to third-party services' fails: it could be a pause, throttling, fail-over, default behavior, etc.  
 You can read about the pattern [on MSDN][MSDN] or from [Martin Fowler][fowler].
 
 ## Install
