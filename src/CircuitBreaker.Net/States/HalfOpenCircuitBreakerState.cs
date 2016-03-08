@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 using CircuitBreaker.Net.Exceptions;
 
@@ -58,6 +59,31 @@ namespace CircuitBreaker.Net.States
             if (Interlocked.CompareExchange(ref _isBeingInvoked, Invoking, NotInvoking) == NotInvoking)
             {
                 return _invoker.InvokeThrough(this, func, _timeout);
+            }
+            else
+            {
+                throw new CircuitBreakerOpenException();
+            }
+        }
+
+        public async Task InvokeAsync(Func<Task> func)
+        {
+            if (Interlocked.CompareExchange(ref _isBeingInvoked, Invoking, NotInvoking) == NotInvoking)
+            {
+                await _invoker.InvokeThroughAsync(this, func, _timeout);
+            }
+            else
+            {
+                throw new CircuitBreakerOpenException();
+            }
+;
+        }
+
+        public async Task<T> InvokeAsync<T>(Func<Task<T>> func)
+        {
+            if (Interlocked.CompareExchange(ref _isBeingInvoked, Invoking, NotInvoking) == NotInvoking)
+            {
+                return await _invoker.InvokeThroughAsync(this, func, _timeout);
             }
             else
             {

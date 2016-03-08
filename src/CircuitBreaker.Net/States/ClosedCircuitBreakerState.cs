@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace CircuitBreaker.Net.States
 {
@@ -50,6 +51,16 @@ namespace CircuitBreaker.Net.States
         public T Invoke<T>(Func<T> func)
         {
             return _invoker.InvokeThrough(this, func, _timeout);
+        }
+
+        public async Task InvokeAsync(Func<Task> func)
+        {
+            await _invoker.InvokeThroughAsync(this, func, _timeout);
+        }
+
+        public async Task<T> InvokeAsync<T>(Func<Task<T>> func)
+        {
+            return await _invoker.InvokeThroughAsync(this, func, _timeout);
         }
     }
 }
