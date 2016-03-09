@@ -8,7 +8,7 @@ namespace CircuitBreaker.Net
     // http://blogs.msdn.com/b/pfxteam/archive/2011/11/10/10235834.aspx
     public static class TaskExtensions
     {
-        public static Task TimeoutAfter<TResult>(this Task<TResult> task, int millisecondsTimeout)
+        public static Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, int millisecondsTimeout)
         {
             // Short-circuit #1: infinite timeout or task already completed
             if (task.IsCompleted || (millisecondsTimeout == Timeout.Infinite))
