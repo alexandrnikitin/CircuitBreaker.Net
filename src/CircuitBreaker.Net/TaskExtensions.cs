@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using CircuitBreaker.Net.Exceptions;
+
 namespace CircuitBreaker.Net
 {
     // The following code is taken from "Crafting a Task.TimeoutAfter Method" post by Joe Hoag
@@ -26,7 +28,7 @@ namespace CircuitBreaker.Net
             if (millisecondsTimeout == 0)
             {
                 // We've already timed out.
-                tcs.SetException(new TimeoutException());
+                tcs.SetException(new CircuitBreakerTimeoutException());
                 return tcs.Task;
             }
 
@@ -38,7 +40,7 @@ namespace CircuitBreaker.Net
                     var myTcs = (TaskCompletionSource<TResult>)state;
 
                     // Fault our proxy with a TimeoutException
-                    myTcs.TrySetException(new TimeoutException());
+                    myTcs.TrySetException(new CircuitBreakerTimeoutException());
                 },
                 tcs,
                 millisecondsTimeout,
@@ -84,7 +86,7 @@ namespace CircuitBreaker.Net
             if (millisecondsTimeout == 0)
             {
                 // We've already timed out.
-                tcs.SetException(new TimeoutException());
+                tcs.SetException(new CircuitBreakerTimeoutException());
                 return tcs.Task;
             }
 
@@ -96,7 +98,7 @@ namespace CircuitBreaker.Net
                         var myTcs = (TaskCompletionSource<VoidTypeStruct>)state;
 
                         // Fault our proxy with a TimeoutException
-                        myTcs.TrySetException(new TimeoutException());
+                        myTcs.TrySetException(new CircuitBreakerTimeoutException());
                     },
                 tcs,
                 millisecondsTimeout,
