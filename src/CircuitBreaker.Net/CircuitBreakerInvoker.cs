@@ -117,34 +117,14 @@ namespace CircuitBreaker.Net
         {
             if (func == null) throw new ArgumentNullException("func");
 
-            var tokenSource = new CancellationTokenSource(timeout);
-
-            var task = _asyncTaskFactory.StartNew(func, tokenSource.Token).Unwrap();
-
-            await task;
-
-            // TODO take timeouts into account for async methods
-            if (task.IsCanceled)
-            {
-                throw new CircuitBreakerTimeoutException();
-            }
+            await Task.Factory.StartNew(func, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Unwrap().TimeoutAfter(timeout.Milliseconds);
         }
 
         private async Task<T> InvokeAsync<T>(Func<Task<T>> func, TimeSpan timeout)
         {
             if (func == null) throw new ArgumentNullException("func");
 
-            var tokenSource = new CancellationTokenSource(timeout);
-
-            var task = _asyncTaskFactory.StartNew(func, tokenSource.Token).Unwrap();
-
-            return await task;
-
-            // TODO take timeouts into account for async methods
-            if (task.IsCanceled)
-            {
-                throw new CircuitBreakerTimeoutException();
-            }
+            return await Task<Task<T>>.Factory.StartNew(func, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Unwrap().TimeoutAfter(timeout.Milliseconds);
         }
 
         private T Invoke<T>(Func<T> func, TimeSpan timeout)
