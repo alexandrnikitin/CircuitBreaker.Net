@@ -117,14 +117,14 @@ namespace CircuitBreaker.Net
         {
             if (func == null) throw new ArgumentNullException("func");
 
-            await Task.Factory.StartNew(func, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Unwrap().TimeoutAfter(timeout.Milliseconds);
+            await Task.Factory.StartNew(func, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Unwrap().TimeoutAfter(timeout);
         }
 
         private async Task<T> InvokeAsync<T>(Func<Task<T>> func, TimeSpan timeout)
         {
             if (func == null) throw new ArgumentNullException("func");
 
-            return await Task<Task<T>>.Factory.StartNew(func, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Unwrap().TimeoutAfter(timeout.Milliseconds);
+            return await Task<Task<T>>.Factory.StartNew(func, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Unwrap().TimeoutAfter(timeout);
         }
 
         private T Invoke<T>(Func<T> func, TimeSpan timeout)

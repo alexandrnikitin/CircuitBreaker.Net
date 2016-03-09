@@ -10,10 +10,10 @@ namespace CircuitBreaker.Net
     // http://blogs.msdn.com/b/pfxteam/archive/2011/11/10/10235834.aspx
     public static class TaskExtensions
     {
-        public static Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, int millisecondsTimeout)
+        public static Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, TimeSpan timeout)
         {
             // Short-circuit #1: infinite timeout or task already completed
-            if (task.IsCompleted || (millisecondsTimeout == Timeout.Infinite))
+            if (task.IsCompleted || (timeout == TimeSpan.MaxValue))
             {
                 // Either the task has already completed or timeout will never occur.
                 // No proxy necessary.
@@ -25,7 +25,7 @@ namespace CircuitBreaker.Net
                 new TaskCompletionSource<TResult>();
 
             // Short-circuit #2: zero timeout
-            if (millisecondsTimeout == 0)
+            if (timeout == TimeSpan.Zero)
             {
                 // We've already timed out.
                 tcs.SetException(new CircuitBreakerTimeoutException());
@@ -43,8 +43,8 @@ namespace CircuitBreaker.Net
                     myTcs.TrySetException(new CircuitBreakerTimeoutException());
                 },
                 tcs,
-                millisecondsTimeout,
-                Timeout.Infinite);
+                timeout,
+                Timeout.InfiniteTimeSpan);
 
             // Wire up the logic for what happens when source task completes
             task.ContinueWith(
@@ -68,10 +68,10 @@ namespace CircuitBreaker.Net
             return tcs.Task;
         }
 
-        public static Task TimeoutAfter(this Task task, int millisecondsTimeout)
+        public static Task TimeoutAfter(this Task task, TimeSpan timeout)
         {
             // Short-circuit #1: infinite timeout or task already completed
-            if (task.IsCompleted || (millisecondsTimeout == Timeout.Infinite))
+            if (task.IsCompleted || (timeout == TimeSpan.MaxValue))
             {
                 // Either the task has already completed or timeout will never occur.
                 // No proxy necessary.
@@ -83,7 +83,7 @@ namespace CircuitBreaker.Net
                 new TaskCompletionSource<VoidTypeStruct>();
 
             // Short-circuit #2: zero timeout
-            if (millisecondsTimeout == 0)
+            if (timeout == TimeSpan.Zero)
             {
                 // We've already timed out.
                 tcs.SetException(new CircuitBreakerTimeoutException());
@@ -101,8 +101,8 @@ namespace CircuitBreaker.Net
                         myTcs.TrySetException(new CircuitBreakerTimeoutException());
                     },
                 tcs,
-                millisecondsTimeout,
-                Timeout.Infinite);
+                timeout,
+                Timeout.InfiniteTimeSpan);
 
             // Wire up the logic for what happens when source task completes
             task.ContinueWith(
