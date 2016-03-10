@@ -115,5 +115,102 @@ namespace CircuitBreaker.Net.Tests
                 _sut.Execute(_anyFunc);
             }
         }
+
+        public class ExecuteAsyncActionTests : CircuitBreakerTests
+        {
+            private readonly Func<Task> _anyAction = () => Task.FromResult(false);
+            private readonly Func<Task> _throwAction = () => { throw new Exception(); };
+            private readonly Func<Task> _timeoutAction = () => Task.Delay(200);
+
+            [Fact]
+            public async void SuccessfulExecution()
+            {
+                for (var i = 0; i < 100; i++)
+                {
+                    await _sut.ExecuteAsync(_anyAction);
+                }
+            }
+
+            [Fact]
+            public async void Timeouts()
+            {
+                await Assert.ThrowsAsync<CircuitBreakerTimeoutException>(() => _sut.ExecuteAsync(_timeoutAction));
+                await Assert.ThrowsAsync<CircuitBreakerTimeoutException>(() => _sut.ExecuteAsync(_timeoutAction));
+                await Assert.ThrowsAsync<CircuitBreakerTimeoutException>(() => _sut.ExecuteAsync(_timeoutAction));
+                await Assert.ThrowsAsync<CircuitBreakerOpenException>(() => _sut.ExecuteAsync(_anyAction));
+            }
+
+            [Fact]
+            public async void Failures()
+            {
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+                await Assert.ThrowsAsync<CircuitBreakerOpenException>(() => _sut.ExecuteAsync(_anyAction));
+            }
+
+            [Fact]
+            public async void ResetAfterTimeout()
+            {
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+
+                Thread.Sleep(ResetTimeout);
+                Thread.Sleep(10);
+
+                await _sut.ExecuteAsync(_anyAction);
+            }
+
+        }
+
+        public class ExecuteAsyncFuncTests : CircuitBreakerTests
+        {
+            private readonly Func<Task<bool>> _anyAction = () => Task.FromResult(false);
+            private readonly Func<Task<bool>> _throwAction = () => { throw new Exception(); };
+            private readonly Func<Task<bool>> _timeoutAction = () => { return Task.Delay(200).ContinueWith(t => false); };
+
+            [Fact]
+            public async void SuccessfulExecution()
+            {
+                for (var i = 0; i < 100; i++)
+                {
+                    await _sut.ExecuteAsync(_anyAction);
+                }
+            }
+
+            [Fact]
+            public async void Timeouts()
+            {
+                await Assert.ThrowsAsync<CircuitBreakerTimeoutException>(() => _sut.ExecuteAsync(_timeoutAction));
+                await Assert.ThrowsAsync<CircuitBreakerTimeoutException>(() => _sut.ExecuteAsync(_timeoutAction));
+                await Assert.ThrowsAsync<CircuitBreakerTimeoutException>(() => _sut.ExecuteAsync(_timeoutAction));
+                await Assert.ThrowsAsync<CircuitBreakerOpenException>(() => _sut.ExecuteAsync(_anyAction));
+            }
+
+            [Fact]
+            public async void Failures()
+            {
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+                await Assert.ThrowsAsync<CircuitBreakerOpenException>(() => _sut.ExecuteAsync(_anyAction));
+            }
+
+            [Fact]
+            public async void ResetAfterTimeout()
+            {
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.ExecuteAsync(_throwAction));
+
+                await Task.Delay(ResetTimeout);
+                await Task.Delay(10);
+
+                await _sut.ExecuteAsync(_anyAction);
+            }
+
+        }
+
     }
 }

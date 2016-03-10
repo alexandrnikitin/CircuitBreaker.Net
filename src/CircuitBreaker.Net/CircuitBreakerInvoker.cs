@@ -57,6 +57,40 @@ namespace CircuitBreaker.Net
             return result;
         }
 
+        public async Task InvokeThroughAsync(ICircuitBreakerState state, Func<Task> func, TimeSpan timeout)
+        {
+            try
+            {
+                await InvokeAsync(func, timeout);
+            }
+            catch (Exception)
+            {
+                state.InvocationFails();
+                throw;
+            }
+
+            state.InvocationSucceeds();
+        }
+
+        public async Task<T> InvokeThroughAsync<T>(ICircuitBreakerState state, Func<Task<T>> func, TimeSpan timeout)
+        {
+            Task<T> task;
+            try
+            {
+                task = InvokeAsync(func, timeout);
+                await task;
+            }
+            catch (Exception)
+            {
+                state.InvocationFails();
+                throw;
+            }
+
+            state.InvocationSucceeds();
+
+            return await task;
+        }
+
         private void Invoke(Action action, TimeSpan timeout)
         {
             if (action == null) throw new ArgumentNullException("action");
@@ -70,6 +104,21 @@ namespace CircuitBreaker.Net
 
             tokenSource.Cancel();
             throw new CircuitBreakerTimeoutException();
+        }
+        
+
+        private async Task InvokeAsync(Func<Task> func, TimeSpan timeout)
+        {
+            if (func == null) throw new ArgumentNullException("func");
+
+            await Task.Factory.StartNew(func, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Unwrap().TimeoutAfter(timeout);
+        }
+
+        private async Task<T> InvokeAsync<T>(Func<Task<T>> func, TimeSpan timeout)
+        {
+            if (func == null) throw new ArgumentNullException("func");
+
+            return await Task<Task<T>>.Factory.StartNew(func, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Unwrap().TimeoutAfter(timeout);
         }
 
         private T Invoke<T>(Func<T> func, TimeSpan timeout)

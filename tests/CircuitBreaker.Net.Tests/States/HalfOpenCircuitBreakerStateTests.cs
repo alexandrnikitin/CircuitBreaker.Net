@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using CircuitBreaker.Net.Exceptions;
 using CircuitBreaker.Net.States;
@@ -47,6 +48,33 @@ namespace CircuitBreaker.Net.Tests.States
 
                 Assert.Throws<CircuitBreakerOpenException>(() => _sut.Invoke(func));
                 _invoker.DidNotReceive().InvokeThrough(Arg.Any<ICircuitBreakerState>(), Arg.Any<Action>(), Arg.Any<TimeSpan>());
+            }
+        }
+
+        public class InvokeAsyncTests : HalfOpenCircuitBreakerStateTests
+        {
+            [Fact]
+            public async void InvokeAsyncOnlyFirstAction()
+            {
+                Func<Task> action = () => Task.FromResult(false);
+                await _sut.InvokeAsync(action);
+                _invoker.Received().InvokeThroughAsync(Arg.Is(_sut), action, Timeout);
+                _invoker.ClearReceivedCalls();
+
+                await Assert.ThrowsAsync<CircuitBreakerOpenException>(() => _sut.InvokeAsync(action));
+                _invoker.DidNotReceive().InvokeThroughAsync(Arg.Any<ICircuitBreakerState>(), Arg.Any<Func<Task>>(), Arg.Any<TimeSpan>());
+            }
+
+            [Fact]
+            public async void InvokeAsyncOnlyFirstFunc()
+            {
+                Func<Task<object>> func = () => Task.FromResult(new object());
+                await _sut.InvokeAsync(func);
+                _invoker.Received().InvokeThroughAsync(Arg.Is(_sut), func, Timeout);
+                _invoker.ClearReceivedCalls();
+
+                await Assert.ThrowsAsync<CircuitBreakerOpenException>(() => _sut.InvokeAsync(func));
+                _invoker.DidNotReceive().InvokeThroughAsync(Arg.Any<ICircuitBreakerState>(), Arg.Any<Func<Task<object>>>(), Arg.Any<TimeSpan>());
             }
         }
     }

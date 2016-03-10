@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using CircuitBreaker.Net.Exceptions;
 
@@ -39,6 +40,16 @@ namespace CircuitBreaker.Net.States
         }
 
         public T Invoke<T>(Func<T> func)
+        {
+            throw new CircuitBreakerOpenException();
+        }
+
+        public async Task InvokeAsync(Func<Task> func)
+        {
+            throw new CircuitBreakerOpenException();
+        }
+
+        public Task<T> InvokeAsync<T>(Func<Task<T>> func)
         {
             throw new CircuitBreakerOpenException();
         }

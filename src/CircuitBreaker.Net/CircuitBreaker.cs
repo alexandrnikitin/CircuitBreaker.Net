@@ -55,6 +55,20 @@ namespace CircuitBreaker.Net
             return _currentState.Invoke(func);
         }
 
+        public async Task ExecuteAsync(Func<Task> func)
+        {
+            if (func == null) throw new ArgumentNullException("func");
+
+            await _currentState.InvokeAsync(func);
+        }
+
+        public async Task<T> ExecuteAsync<T>(Func<Task<T>> func)
+        {
+            if (func == null) throw new ArgumentNullException("func");
+
+            return await _currentState.InvokeAsync(func);
+        }
+
         void ICircuitBreakerSwitch.AttemptToCloseCircuit(ICircuitBreakerState from)
         {
             Trip(from, _halfOpenedState);

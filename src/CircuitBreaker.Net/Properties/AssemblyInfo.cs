@@ -7,10 +7,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyrightAttribute("Copyright � 2015")]
 [assembly: GuidAttribute("dc40055a-b114-422e-b9bf-555fe23d9305")]
 [assembly: AssemblyProductAttribute("CircuitBreaker.Net")]
-[assembly: AssemblyVersionAttribute("0.1.0.0")]
-[assembly: AssemblyFileVersionAttribute("0.1.0.0")]
+[assembly: AssemblyVersionAttribute("0.2.2.0")]
+[assembly: AssemblyFileVersionAttribute("0.2.2.0")]
 namespace System {
     internal static class AssemblyVersionInformation {
-        internal const string Version = "0.1.0.0";
+        internal const string Version = "0.2.2.0";
     }
 }

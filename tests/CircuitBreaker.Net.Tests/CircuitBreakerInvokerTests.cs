@@ -69,5 +69,41 @@ namespace CircuitBreaker.Net.Tests
                 state.Received().InvocationSucceeds();
             }
         }
+
+        public class InvokeThroughAsyncTests : CircuitBreakerInvokerTests
+        {
+            [Fact]
+            public async void ActionFailureInvocation()
+            {
+                var state = Substitute.For<ICircuitBreakerState>();
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.InvokeThroughAsync(state, () => { throw new Exception(); }, TimeSpan.FromMilliseconds(100)));
+                state.Received().InvocationFails();
+            }
+
+            [Fact]
+            public async void ActionSuccessfulInvocation()
+            {
+                var state = Substitute.For<ICircuitBreakerState>();
+                await _sut.InvokeThroughAsync(state, () => Task.FromResult(false), TimeSpan.FromMilliseconds(100));
+                state.Received().InvocationSucceeds();
+            }
+
+            [Fact]
+            public async void FuncFailureInvocation()
+            {
+                var state = Substitute.For<ICircuitBreakerState>();
+                Func<Task<object>> func = () => { throw new Exception(); };
+                await Assert.ThrowsAnyAsync<Exception>(() => _sut.InvokeThroughAsync(state, func, TimeSpan.FromMilliseconds(100)));
+                state.Received().InvocationFails();
+            }
+
+            [Fact]
+            public async void FuncSuccessfulInvocation()
+            {
+                var state = Substitute.For<ICircuitBreakerState>();
+                await _sut.InvokeThroughAsync(state, () => Task.FromResult(new object()), TimeSpan.FromMilliseconds(100));
+                state.Received().InvocationSucceeds();
+            }
+        }
     }
 }
