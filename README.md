@@ -25,6 +25,8 @@ try
 {
     // perform a potentially fragile call through the circuit breaker
     circuitBreaker.Execute(externalService.Call);
+    // or its async version
+    // await circuitBreaker.ExecuteAsync(externalService.CallAsync);
 }
 catch (CircuitBreakerOpenException)
 {
