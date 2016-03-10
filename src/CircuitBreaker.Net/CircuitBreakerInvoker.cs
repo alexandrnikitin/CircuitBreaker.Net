@@ -10,18 +10,12 @@ namespace CircuitBreaker.Net
     internal class CircuitBreakerInvoker : ICircuitBreakerInvoker
     {
         private readonly TaskScheduler _taskScheduler;
-        private readonly TaskFactory _asyncTaskFactory;
 
         private Timer _timer;
 
         public CircuitBreakerInvoker(TaskScheduler taskScheduler)
         {
             _taskScheduler = taskScheduler;
-            _asyncTaskFactory = new TaskFactory(
-                CancellationToken.None,
-                TaskCreationOptions.None,
-                TaskContinuationOptions.None,
-                _taskScheduler);
         }
 
         public void InvokeScheduled(Action action, TimeSpan interval)
