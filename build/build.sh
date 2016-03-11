@@ -1,2 +1,11 @@
 #!/bin/bash
-mono packages/FAKE.4.3.4/tools/Fake.exe BuildTests --fsiargs -d:MONO build.fsx
+SCRIPT_PATH="${BASH_SOURCE[0]}";
+if ([ -h "${SCRIPT_PATH}" ]) then
+  while([ -h "${SCRIPT_PATH}" ]) do SCRIPT_PATH=`readlink "${SCRIPT_PATH}"`; done
+fi
+pushd . > /dev/null
+cd `dirname ${SCRIPT_PATH}` > /dev/null
+SCRIPT_PATH=`pwd`;
+popd  > /dev/null
+
+mono $SCRIPT_PATH/../packages/FAKE.4.3.4/tools/FAKE.exe BuildTests --fsiargs -d:MONO build.fsx
