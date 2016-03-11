@@ -5,10 +5,10 @@ RestorePackages()
 
 let product = "CircuitBreaker.Net"
 let description = "Implementation of CircuitBreaker pattern on .NET"
-let copyright = @"Copyright � 2015"
+let copyright = @"Copyright 2015"
 let authors = [ "Alexandr Nikitin" ]
 let company = "Alexandr Nikitin"
-let tags = ["CircuitBreaker"]
+let tags = ["CircuitBreaker",  "Circuit", "Breaker", "C#"]
 let version = "0.2.2"
 
 let buildDir = "output"
