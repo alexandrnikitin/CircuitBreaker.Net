@@ -1,3 +1,5 @@
 language: csharp
+sudo: false
 script:
+  - mono .nuget/NuGet.exe restore CircuitBreaker.Net.sln
   - ./build/build.sh
