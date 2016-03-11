@@ -1,5 +1,7 @@
 language: csharp
 sudo: false
-script:
+before_script:
   - mono .nuget/NuGet.exe restore CircuitBreaker.Net.sln
+  - chmod +x build/build.sh
+script:
   - ./build/build.sh
