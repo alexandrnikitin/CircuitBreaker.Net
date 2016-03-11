@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{5384C2AD
 	ProjectSection(SolutionItems) = preProject
 		build\build.bat = build\build.bat
 		build\build.fsx = build\build.fsx
+		build\build.sh = build\build.sh
 		build\CircuitBreaker.Net.nuspec = build\CircuitBreaker.Net.nuspec
 		build\CircuitBreaker.Net.Source.nuspec = build\CircuitBreaker.Net.Source.nuspec
 	EndProjectSection
@@ -24,6 +25,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircuitBreaker.Net.Tests", "tests\CircuitBreaker.Net.Tests\CircuitBreaker.Net.Tests.csproj", "{E4877747-A9A9-455B-A8A7-96E38DDA6D07}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircuitBreaker.Net.Sample", "samples\CircuitBreaker.Net.Sample\CircuitBreaker.Net.Sample.csproj", "{863E4B3C-D632-4848-AAF0-0319C45715E4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{69F4F939-5D64-4CE7-98B2-85D824D6E911}"
+	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
