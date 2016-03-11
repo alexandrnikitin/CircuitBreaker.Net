@@ -110,6 +110,7 @@ Target "NuGetSource" (fun _ ->
     CopyFile contentCircuitBreakerDir ("../src/CircuitBreaker.Net/ICircuitBreaker.cs")
     CopyFile contentCircuitBreakerDir ("../src/CircuitBreaker.Net/ICircuitBreakerInvoker.cs")
     CopyFile contentCircuitBreakerDir ("../src/CircuitBreaker.Net/ICircuitBreakerSwitch.cs")
+    CopyFile contentCircuitBreakerDir ("../src/CircuitBreaker.Net/TaskExtensions.cs")
 
     CopyFile contentCircuitBreakerStatesDir ("../src/CircuitBreaker.Net/States/ClosedCircuitBreakerState.cs")
     CopyFile contentCircuitBreakerStatesDir ("../src/CircuitBreaker.Net/States/HalfOpenCircuitBreakerState.cs")
