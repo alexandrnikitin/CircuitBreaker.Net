@@ -1,3 +1,3 @@
 language: csharp
 script:
-  - ./build/build.sh BuildTests
+  - ./build/build.sh
