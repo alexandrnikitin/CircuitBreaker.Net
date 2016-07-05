@@ -1,5 +1,5 @@
 # CircuitBreaker.Net
-[![Build Status](https://travis-ci.org/alexandrnikitin/CircuitBreaker.Net.svg?branch=master)](https://travis-ci.org/alexandrnikitin/CircuitBreaker.Net)
+[![Build Status](https://travis-ci.org/alexandrnikitin/CircuitBreaker.Net.svg?branch=master)](https://travis-ci.org/alexandrnikitin/CircuitBreaker.Net) [![NuGet version](https://badge.fury.io/nu/CircuitBreaker.Net.svg)](https://badge.fury.io/nu/CircuitBreaker.Net)
 
 ## Overview
 
