@@ -41,28 +41,28 @@ namespace CircuitBreaker.Net
             _currentState = _closedState;
         }
 
-        public void Execute(Action action)
+        public virtual void Execute(Action action)
         {
             if (action == null) throw new ArgumentNullException("action");
 
             _currentState.Invoke(action);
         }
 
-        public T Execute<T>(Func<T> func)
+        public virtual T Execute<T>(Func<T> func)
         {
             if (func == null) throw new ArgumentNullException("func");
             
             return _currentState.Invoke(func);
         }
 
-        public async Task ExecuteAsync(Func<Task> func)
+        public virtual async Task ExecuteAsync(Func<Task> func)
         {
             if (func == null) throw new ArgumentNullException("func");
 
             await _currentState.InvokeAsync(func);
         }
 
-        public async Task<T> ExecuteAsync<T>(Func<Task<T>> func)
+        public virtual async Task<T> ExecuteAsync<T>(Func<Task<T>> func)
         {
             if (func == null) throw new ArgumentNullException("func");
 
