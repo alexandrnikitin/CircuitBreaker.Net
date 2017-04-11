@@ -117,6 +117,7 @@ Target "NuGetSource" (fun _ ->
     CopyFile contentCircuitBreakerStatesDir ("../src/CircuitBreaker.Net/States/ICircuitBreakerState.cs")
     CopyFile contentCircuitBreakerStatesDir ("../src/CircuitBreaker.Net/States/OpenCircuitBreakerState.cs")
 
+    CopyFile contentCircuitBreakerExceptionsDir ("../src/CircuitBreaker.Net/Exceptions/CircuitBreakerException.cs")
     CopyFile contentCircuitBreakerExceptionsDir ("../src/CircuitBreaker.Net/Exceptions/CircuitBreakerExecutionException.cs")
     CopyFile contentCircuitBreakerExceptionsDir ("../src/CircuitBreaker.Net/Exceptions/CircuitBreakerOpenException.cs")
     CopyFile contentCircuitBreakerExceptionsDir ("../src/CircuitBreaker.Net/Exceptions/CircuitBreakerTimeoutException.cs")
