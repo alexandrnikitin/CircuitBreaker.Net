@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="CircuitBreaker.cs" />
     <Compile Include="CircuitBreakerInvoker.cs" />
+    <Compile Include="Exceptions\CircuitBreakerException.cs" />
     <Compile Include="Exceptions\CircuitBreakerExecutionException.cs" />
     <Compile Include="Exceptions\CircuitBreakerOpenException.cs" />
     <Compile Include="Exceptions\CircuitBreakerTimeoutException.cs" />

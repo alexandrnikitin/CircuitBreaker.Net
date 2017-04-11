@@ -2,7 +2,7 @@
 
 namespace CircuitBreaker.Net.Exceptions
 {
-    public class CircuitBreakerExecutionException : Exception
+    public class CircuitBreakerExecutionException : CircuitBreakerException
     {
     }
 }
