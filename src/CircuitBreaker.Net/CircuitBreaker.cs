@@ -75,17 +75,17 @@ namespace CircuitBreaker.Net
 
         void ICircuitBreakerSwitch.AttemptToCloseCircuit(ICircuitBreakerState from)
         {
-            if (Trip(from, _halfOpenedState)) _circuitBreakerEventHandler.CircuitHalfOpened(this);
+            if (Trip(from, _halfOpenedState)) _circuitBreakerEventHandler?.CircuitHalfOpened(this);
         }
 
         void ICircuitBreakerSwitch.CloseCircuit(ICircuitBreakerState from)
         {
-            if (Trip(from, _closedState)) _circuitBreakerEventHandler.CircuitClosed(this);
+            if (Trip(from, _closedState)) _circuitBreakerEventHandler?.CircuitClosed(this);
         }
 
         void ICircuitBreakerSwitch.OpenCircuit(ICircuitBreakerState from)
         {
-            if (Trip(from, _openedState)) _circuitBreakerEventHandler.CircuitOpened(this);
+            if (Trip(from, _openedState)) _circuitBreakerEventHandler?.CircuitOpened(this);
         }
 
         private bool Trip(ICircuitBreakerState from, ICircuitBreakerState to)
