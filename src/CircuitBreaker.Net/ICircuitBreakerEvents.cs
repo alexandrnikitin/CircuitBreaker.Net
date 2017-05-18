@@ -4,8 +4,8 @@ namespace CircuitBreaker.Net
 {
     public interface ICircuitBreakerEvents
     {
-        event EventHandler Closed;
-        event EventHandler Opened;
-        event EventHandler HalfOpened;
+        void CircuitClosed(ICircuitBreaker circuitBreaker);
+        void CircuitOpened(ICircuitBreaker circuitBreaker);
+        void CircuitHalfOpened(ICircuitBreaker circuitBreaker);
     }
 }

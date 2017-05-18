@@ -11,14 +11,17 @@ namespace CircuitBreaker.Net
         private readonly ICircuitBreakerState _closedState;
         private readonly ICircuitBreakerState _halfOpenedState;
         private readonly ICircuitBreakerState _openedState;
-        
+
         private ICircuitBreakerState _currentState;
+
+        private ICircuitBreakerEvents _circuitBreakerEventHandler;
 
         public CircuitBreaker(
             TaskScheduler taskScheduler,
             int maxFailures,
             TimeSpan invocationTimeout,
-            TimeSpan circuitResetTimeout)
+            TimeSpan circuitResetTimeout,
+            ICircuitBreakerEvents eventHandler = null)
         {
             var invoker = new CircuitBreakerInvoker(taskScheduler);
 
@@ -39,6 +42,7 @@ namespace CircuitBreaker.Net
                 circuitResetTimeout);
 
             _currentState = _closedState;
+            _circuitBreakerEventHandler = eventHandler;
         }
 
         public virtual void Execute(Action action)
@@ -71,25 +75,29 @@ namespace CircuitBreaker.Net
 
         void ICircuitBreakerSwitch.AttemptToCloseCircuit(ICircuitBreakerState from)
         {
-            Trip(from, _halfOpenedState);
+            if (Trip(from, _halfOpenedState)) _circuitBreakerEventHandler.CircuitHalfOpened(this);
         }
 
         void ICircuitBreakerSwitch.CloseCircuit(ICircuitBreakerState from)
         {
-            Trip(from, _closedState);
+            if (Trip(from, _closedState)) _circuitBreakerEventHandler.CircuitClosed(this);
         }
 
         void ICircuitBreakerSwitch.OpenCircuit(ICircuitBreakerState from)
         {
-            Trip(from, _openedState);
+            if (Trip(from, _openedState)) _circuitBreakerEventHandler.CircuitOpened(this);
         }
 
-        private void Trip(ICircuitBreakerState from, ICircuitBreakerState to)
+        private bool Trip(ICircuitBreakerState from, ICircuitBreakerState to)
         {
             if (Interlocked.CompareExchange(ref _currentState, to, from) == from)
             {
                 to.Enter();
+
+                return true;
             }
+
+            return false;
         }
     }
 }
