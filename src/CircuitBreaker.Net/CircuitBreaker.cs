@@ -14,14 +14,11 @@ namespace CircuitBreaker.Net
 
         private ICircuitBreakerState _currentState;
 
-        private ICircuitBreakerEvents _circuitBreakerEventHandler;
-
         public CircuitBreaker(
             TaskScheduler taskScheduler,
             int maxFailures,
             TimeSpan invocationTimeout,
-            TimeSpan circuitResetTimeout,
-            ICircuitBreakerEvents eventHandler = null)
+            TimeSpan circuitResetTimeout)
         {
             var invoker = new CircuitBreakerInvoker(taskScheduler);
 
@@ -42,8 +39,9 @@ namespace CircuitBreaker.Net
                 circuitResetTimeout);
 
             _currentState = _closedState;
-            _circuitBreakerEventHandler = eventHandler;
         }
+
+        public ICircuitBreakerEvents CircuitBreakerEventHandler { get; set; }
 
         public virtual void Execute(Action action)
         {
@@ -75,17 +73,17 @@ namespace CircuitBreaker.Net
 
         void ICircuitBreakerSwitch.AttemptToCloseCircuit(ICircuitBreakerState from)
         {
-            if (Trip(from, _halfOpenedState)) _circuitBreakerEventHandler?.CircuitHalfOpened(this);
+            if (Trip(from, _halfOpenedState)) CircuitBreakerEventHandler?.CircuitHalfOpened(this);
         }
 
         void ICircuitBreakerSwitch.CloseCircuit(ICircuitBreakerState from)
         {
-            if (Trip(from, _closedState)) _circuitBreakerEventHandler?.CircuitClosed(this);
+            if (Trip(from, _closedState)) CircuitBreakerEventHandler?.CircuitClosed(this);
         }
 
         void ICircuitBreakerSwitch.OpenCircuit(ICircuitBreakerState from)
         {
-            if (Trip(from, _openedState)) _circuitBreakerEventHandler?.CircuitOpened(this);
+            if (Trip(from, _openedState)) CircuitBreakerEventHandler?.CircuitOpened(this);
         }
 
         private bool Trip(ICircuitBreakerState from, ICircuitBreakerState to)
