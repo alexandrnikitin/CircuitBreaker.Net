@@ -9,7 +9,7 @@ let copyright = @"Copyright 2015"
 let authors = [ "Alexandr Nikitin" ]
 let company = "Alexandr Nikitin"
 let tags = ["CircuitBreaker"; "Circuit"; "Breaker"; "C#"]
-let version = "0.5.0"
+let version = "0.6.0"
 
 let buildDir = "output"
 let buildTestsDir = "output-tests"
