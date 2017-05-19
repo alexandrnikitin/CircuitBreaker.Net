@@ -8,4 +8,4 @@ cd `dirname ${SCRIPT_PATH}` > /dev/null
 SCRIPT_PATH=`pwd`;
 popd  > /dev/null
 
-mono $SCRIPT_PATH/../packages/FAKE.4.58.5/tools/FAKE.exe BuildTests --fsiargs -d:MONO $SCRIPT_PATH/build.fsx
+mono $SCRIPT_PATH/../packages/FAKE.4.61.2/tools/FAKE.exe BuildTests --fsiargs -d:MONO $SCRIPT_PATH/build.fsx
