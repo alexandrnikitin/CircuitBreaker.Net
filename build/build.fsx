@@ -94,52 +94,6 @@ Target "NuGet" (fun _ ->
             "CircuitBreaker.Net.nuspec"
 )
 
-Target "NuGetSource" (fun _ ->
-    
-    let contentDir = packagingSourceDir @@ "content"
-    ensureDirectory contentDir
-    let contentCircuitBreakerDir = contentDir @@ "CircuitBreaker"
-    ensureDirectory contentCircuitBreakerDir
-    let contentCircuitBreakerStatesDir = contentCircuitBreakerDir @@ "States"
-    ensureDirectory contentCircuitBreakerStatesDir
-    let contentCircuitBreakerExceptionsDir = contentCircuitBreakerDir @@ "Exceptions"
-    ensureDirectory contentCircuitBreakerExceptionsDir
-
-    CopyFile contentCircuitBreakerDir ("../src/CircuitBreaker.Net/CircuitBreaker.cs")
-    CopyFile contentCircuitBreakerDir ("../src/CircuitBreaker.Net/CircuitBreakerInvoker.cs")
-    CopyFile contentCircuitBreakerDir ("../src/CircuitBreaker.Net/ICircuitBreaker.cs")
-    CopyFile contentCircuitBreakerDir ("../src/CircuitBreaker.Net/ICircuitBreakerInvoker.cs")
-    CopyFile contentCircuitBreakerDir ("../src/CircuitBreaker.Net/ICircuitBreakerSwitch.cs")
-    CopyFile contentCircuitBreakerDir ("../src/CircuitBreaker.Net/TaskExtensions.cs")
-
-    CopyFile contentCircuitBreakerStatesDir ("../src/CircuitBreaker.Net/States/ClosedCircuitBreakerState.cs")
-    CopyFile contentCircuitBreakerStatesDir ("../src/CircuitBreaker.Net/States/HalfOpenCircuitBreakerState.cs")
-    CopyFile contentCircuitBreakerStatesDir ("../src/CircuitBreaker.Net/States/ICircuitBreakerState.cs")
-    CopyFile contentCircuitBreakerStatesDir ("../src/CircuitBreaker.Net/States/OpenCircuitBreakerState.cs")
-
-    CopyFile contentCircuitBreakerExceptionsDir ("../src/CircuitBreaker.Net/Exceptions/CircuitBreakerException.cs")
-    CopyFile contentCircuitBreakerExceptionsDir ("../src/CircuitBreaker.Net/Exceptions/CircuitBreakerExecutionException.cs")
-    CopyFile contentCircuitBreakerExceptionsDir ("../src/CircuitBreaker.Net/Exceptions/CircuitBreakerOpenException.cs")
-    CopyFile contentCircuitBreakerExceptionsDir ("../src/CircuitBreaker.Net/Exceptions/CircuitBreakerTimeoutException.cs")
-
-    NuGet (fun p -> 
-        {p with
-            Authors = authors
-            Project = product + ".Source"
-            Description = description
-            Summary = description
-            Tags = tags |> String.concat " "
-            Version = version
-
-            OutputPath = packagingRoot
-            WorkingDir = packagingSourceDir
-            ToolPath = nugetPath
-
-            Publish = false
-            }) 
-            "CircuitBreaker.Net.Source.nuspec"
-)
-
 "Clean"
   ==> "AssemblyInfo"
   ==> "Build"
@@ -147,7 +101,6 @@ Target "NuGetSource" (fun _ ->
   ==> "Test"
   ==> "Default"
   ==> "NuGet"
-  ==> "NuGetSource"
   ==> "Publish"
 
 
