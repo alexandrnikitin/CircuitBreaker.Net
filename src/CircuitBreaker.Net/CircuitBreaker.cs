@@ -41,7 +41,7 @@ namespace CircuitBreaker.Net
             _currentState = _closedState;
         }
 
-        public ICircuitBreakerEvents CircuitBreakerEventHandler { get; set; }
+        public ICircuitBreakerEventHandler EventHandler { get; set; }
 
         public virtual void Execute(Action action)
         {
@@ -73,28 +73,29 @@ namespace CircuitBreaker.Net
 
         void ICircuitBreakerSwitch.AttemptToCloseCircuit(ICircuitBreakerState from)
         {
-            if (Trip(from, _halfOpenedState)) CircuitBreakerEventHandler?.CircuitHalfOpened(this);
+            var tripped = TryToTrip(from, _halfOpenedState);
+            if (tripped) EventHandler?.OnCircuitHalfOpened(this);
         }
 
         void ICircuitBreakerSwitch.CloseCircuit(ICircuitBreakerState from)
         {
-            if (Trip(from, _closedState)) CircuitBreakerEventHandler?.CircuitClosed(this);
+            var tripped = TryToTrip(from, _closedState);
+            if (tripped) EventHandler?.OnCircuitClosed(this);
         }
 
         void ICircuitBreakerSwitch.OpenCircuit(ICircuitBreakerState from)
         {
-            if (Trip(from, _openedState)) CircuitBreakerEventHandler?.CircuitOpened(this);
+            var tripped = TryToTrip(from, _openedState);
+            if (tripped) EventHandler?.OnCircuitOpened(this);
         }
 
-        private bool Trip(ICircuitBreakerState from, ICircuitBreakerState to)
+        private bool TryToTrip(ICircuitBreakerState from, ICircuitBreakerState to)
         {
             if (Interlocked.CompareExchange(ref _currentState, to, from) == from)
             {
                 to.Enter();
-
                 return true;
             }
-
             return false;
         }
     }

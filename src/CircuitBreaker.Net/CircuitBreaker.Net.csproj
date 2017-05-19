@@ -52,7 +52,7 @@
     <Compile Include="Exceptions\CircuitBreakerOpenException.cs" />
     <Compile Include="Exceptions\CircuitBreakerTimeoutException.cs" />
     <Compile Include="ICircuitBreaker.cs" />
-    <Compile Include="ICircuitBreakerEvents.cs" />
+    <Compile Include="ICircuitBreakerEventHandler.cs" />
     <Compile Include="ICircuitBreakerInvoker.cs" />
     <Compile Include="ICircuitBreakerSwitch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
