@@ -12,9 +12,6 @@ You can read about the pattern [on MSDN][MSDN] or from [Martin Fowler][fowler].
 It's available via [a nuget package](https://www.nuget.org/packages/CircuitBreaker.Net)  
 PM> `Install-Package CircuitBreaker.Net`
 
-Or a nuget package [with the sources only](https://www.nuget.org/packages/CircuitBreaker.Net.Source)  
-PM> `Install-Package CircuitBreaker.Net.Source`
-
 ## Example Usage
 
 ```csharp
