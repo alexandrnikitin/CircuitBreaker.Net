@@ -44,7 +44,7 @@ namespace CircuitBreaker.Net.States
             throw new CircuitBreakerOpenException();
         }
 
-        public async Task InvokeAsync(Func<Task> func)
+        public Task InvokeAsync(Func<Task> func)
         {
             throw new CircuitBreakerOpenException();
         }

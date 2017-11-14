@@ -10,7 +10,7 @@ namespace CircuitBreaker.Net.Sample
             throw new Exception();
         }
 
-        public async Task GetAsync()
+        public Task GetAsync()
         {
             throw new Exception();
         }
