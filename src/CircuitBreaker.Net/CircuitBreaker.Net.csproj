@@ -1,74 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9483732D-740B-4AB1-B177-063903462AE4}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CircuitBreaker.Net</RootNamespace>
-    <AssemblyName>CircuitBreaker.Net</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <Description>Implementation of CircuitBreaker pattern on .NET</Description>
+    <Copyright>Copyright 2015</Copyright>
     <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
+    <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>..\CircuitBreaker.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="CircuitBreaker.cs" />
-    <Compile Include="CircuitBreakerInvoker.cs" />
-    <Compile Include="Exceptions\CircuitBreakerException.cs" />
-    <Compile Include="Exceptions\CircuitBreakerExecutionException.cs" />
-    <Compile Include="Exceptions\CircuitBreakerOpenException.cs" />
-    <Compile Include="Exceptions\CircuitBreakerTimeoutException.cs" />
-    <Compile Include="ICircuitBreaker.cs" />
-    <Compile Include="ICircuitBreakerEventHandler.cs" />
-    <Compile Include="ICircuitBreakerInvoker.cs" />
-    <Compile Include="ICircuitBreakerSwitch.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\InternalsVisibleTo.cs" />
-    <Compile Include="States\ICircuitBreakerState.cs" />
-    <Compile Include="States\ClosedCircuitBreakerState.cs" />
-    <Compile Include="States\HalfOpenCircuitBreakerState.cs" />
-    <Compile Include="States\OpenCircuitBreakerState.cs" />
-    <Compile Include="TaskExtensions.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
