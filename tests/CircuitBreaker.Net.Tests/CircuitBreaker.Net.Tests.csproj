@@ -1,14 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-
+    <TargetFrameworks>netcoreapp2.0;netcoreapp1.1;net46;net45</TargetFrameworks>
     <IsPackable>false</IsPackable>
-
     <SignAssembly>true</SignAssembly>
-
     <DelaySign>false</DelaySign>
-
     <AssemblyOriginatorKeyFile>..\..\src\CircuitBreaker.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 

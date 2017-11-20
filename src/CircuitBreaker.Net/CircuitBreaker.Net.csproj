@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
     <Description>Implementation of CircuitBreaker pattern on .NET</Description>
     <Copyright>Copyright 2015</Copyright>
     <SignAssembly>true</SignAssembly>
