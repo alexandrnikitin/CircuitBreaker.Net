@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Copyright>Copyright ©  2015</Copyright>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

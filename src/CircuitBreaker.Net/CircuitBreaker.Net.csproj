@@ -1,9 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Description>Implementation of CircuitBreaker pattern for .NET</Description>
+    <Version>0.7.0</Version>
+    <Authors>Alexandr Nikitin</Authors>
+
     <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
-    <Description>Implementation of CircuitBreaker pattern on .NET</Description>
-    <Copyright>Copyright 2015</Copyright>
+    <PackageTags>Resilience;Pattern;Distributed;CircuitBreaker;Circuit;Breaker</PackageTags>
+    <PackageProjectUrl>https://github.com/alexandrnikitin/CircuitBreaker.Net</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/alexandrnikitin/CircuitBreaker.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <Copyright>Copyright 2017</Copyright>
+
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>..\CircuitBreaker.Net.snk</AssemblyOriginatorKeyFile>
