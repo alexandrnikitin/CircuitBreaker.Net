@@ -86,7 +86,10 @@ namespace CircuitBreaker.Net
             if (timeout == TimeSpan.Zero)
             {
                 // We've already timed out.
-                tcs.SetException(new CircuitBreakerTimeoutException());
+                if (task.IsFaulted)
+                    tcs.SetException(new CircuitBreakerOpenException(task.Exception));
+                else
+                    tcs.SetException(new CircuitBreakerTimeoutException());
                 return tcs.Task;
             }
 

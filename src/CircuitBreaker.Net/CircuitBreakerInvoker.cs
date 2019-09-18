@@ -103,9 +103,13 @@ namespace CircuitBreaker.Net
             }
 
             tokenSource.Cancel();
-            throw new CircuitBreakerTimeoutException();
+
+            if (task.IsFaulted)
+                throw new CircuitBreakerOpenException(task.Exception);
+            else
+                throw new CircuitBreakerTimeoutException();
         }
-        
+
 
         private async Task InvokeAsync(Func<Task> func, TimeSpan timeout)
         {
@@ -133,7 +137,11 @@ namespace CircuitBreaker.Net
             }
 
             tokenSource.Cancel();
-            throw new CircuitBreakerTimeoutException();
+
+            if (task.IsFaulted)
+                throw new CircuitBreakerOpenException(task.Exception);
+            else
+                throw new CircuitBreakerTimeoutException();
         }
     }
 }
