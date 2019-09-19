@@ -96,13 +96,27 @@ namespace CircuitBreaker.Net
             if (action == null) throw new ArgumentNullException("action");
 
             var tokenSource = new CancellationTokenSource();
-            var task = Task.Factory.StartNew(action, tokenSource.Token, TaskCreationOptions.None, _taskScheduler);
-            if (task.IsCompleted || task.Wait((int)timeout.TotalMilliseconds, tokenSource.Token))
-            {
-                return;
-            }
 
-            tokenSource.Cancel();
+            Task task = null;
+
+            try
+            {
+                task = Task.Factory.StartNew(action, tokenSource.Token, TaskCreationOptions.None, _taskScheduler);
+
+                if (task.IsCompleted || task.Wait((int)timeout.TotalMilliseconds, tokenSource.Token))
+                {
+                    return;
+                }
+
+                if (task.Status == TaskStatus.Running)
+                {
+                    tokenSource.Cancel();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new CircuitBreakerOpenException(e);
+            }
 
             if (task.IsFaulted)
                 throw new CircuitBreakerOpenException(task.Exception);
@@ -127,16 +141,31 @@ namespace CircuitBreaker.Net
 
         private T Invoke<T>(Func<T> func, TimeSpan timeout)
         {
+
             if (func == null) throw new ArgumentNullException("func");
 
             var tokenSource = new CancellationTokenSource();
-            var task = Task<T>.Factory.StartNew(func, tokenSource.Token, TaskCreationOptions.None, _taskScheduler);
-            if (task.IsCompleted || task.Wait((int)timeout.TotalMilliseconds, tokenSource.Token))
-            {
-                return task.Result;
-            }
 
-            tokenSource.Cancel();
+            Task<T> task = null;
+
+            try
+            {
+                task = Task<T>.Factory.StartNew(func, tokenSource.Token, TaskCreationOptions.None, _taskScheduler);
+
+                if (task.IsCompleted || task.Wait((int)timeout.TotalMilliseconds, tokenSource.Token))
+                {
+                    return task.Result;
+                }
+
+                if (task.Status == TaskStatus.Running)
+                {
+                    tokenSource.Cancel();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new CircuitBreakerOpenException(e);
+            }
 
             if (task.IsFaulted)
                 throw new CircuitBreakerOpenException(task.Exception);
