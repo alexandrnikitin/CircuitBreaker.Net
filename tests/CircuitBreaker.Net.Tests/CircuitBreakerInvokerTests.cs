@@ -43,7 +43,22 @@ namespace CircuitBreaker.Net.Tests
                 Assert.ThrowsAny<Exception>(() => _sut.InvokeThrough(state, () => { throw new Exception(); }, TimeSpan.FromMilliseconds(100)));
                 state.Received().InvocationFails();
             }
-
+            [Fact]
+            public void ExepectOpenExceptionWhenActionFails()
+            {
+                var state = Substitute.For<ICircuitBreakerState>();
+                var e = Assert.ThrowsAny<Exception>(() => _sut.InvokeThrough(state, () => { throw new Exception(); }, TimeSpan.FromMilliseconds(100)));
+                state.Received().InvocationFails();
+                Assert.IsType<Exceptions.CircuitBreakerOpenException>(e);
+            }
+            [Fact]
+            public void ExepectInnerExceptionWhenActionFails()
+            {
+                var state = Substitute.For<ICircuitBreakerState>();
+                var e = Assert.ThrowsAny<Exception>(() => _sut.InvokeThrough(state, () => { throw new ArgumentNullException(); }, TimeSpan.FromMilliseconds(100)));
+                state.Received().InvocationFails();
+                Assert.IsType<ArgumentNullException>(e.InnerException.InnerException);
+            }
             [Fact]
             public void ActionSucceessfulInvocation()
             {
